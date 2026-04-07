@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Incident Command Center | War Room</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #131315;
+            color: #e4e2e4;
+        }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono-data { font-family: 'Space Grotesk', monospace; letter-spacing: -0.02em; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Tactical Glows */
+        .glow-critical {
+            box-shadow: inset 0 0 20px rgba(255, 85, 69, 0.15);
+        }
+        .pulse-critical {
+            border: 1px solid rgba(255, 85, 69, 0.3);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#633700",
+                      "primary-fixed": "#ffdad5",
+                      "outline": "#ad8883",
+                      "surface-dim": "#131315",
+                      "tertiary-fixed-dim": "#53e16f",
+                      "outline-variant": "#5d3f3b",
+                      "error-container": "#93000a",
+                      "surface": "#131315",
+                      "on-error": "#690005",
+                      "secondary-fixed-dim": "#ffb874",
+                      "secondary-container": "#fe9400",
+                      "surface-container": "#1f1f21",
+                      "on-tertiary-fixed": "#002107",
+                      "primary-container": "#ff5545",
+                      "secondary-fixed": "#ffdcbf",
+                      "primary-fixed-dim": "#ffb4aa",
+                      "on-error-container": "#ffdad6",
+                      "background": "#131315",
+                      "tertiary-container": "#00a741",
+                      "error": "#ffb4ab",
+                      "surface-variant": "#353437",
+                      "tertiary": "#53e16f",
+                      "on-primary-fixed": "#410001",
+                      "surface-bright": "#39393b",
+                      "on-tertiary-fixed-variant": "#00531c",
+                      "inverse-primary": "#c0000a",
+                      "inverse-on-surface": "#303032",
+                      "on-primary-container": "#5c0002",
+                      "surface-container-lowest": "#0e0e10",
+                      "on-primary": "#690003",
+                      "surface-container-low": "#1b1b1d",
+                      "on-surface-variant": "#e7bdb7",
+                      "on-secondary-fixed": "#2d1600",
+                      "primary": "#ffb4aa",
+                      "tertiary-fixed": "#72fe88",
+                      "on-secondary-fixed-variant": "#6a3b00",
+                      "surface-container-highest": "#353437",
+                      "surface-container-high": "#2a2a2c",
+                      "inverse-surface": "#e4e2e4",
+                      "on-secondary": "#4b2800",
+                      "on-background": "#e4e2e4",
+                      "surface-tint": "#ffb4aa",
+                      "on-tertiary-container": "#00320e",
+                      "on-tertiary": "#003911",
+                      "secondary": "#ffbc7c",
+                      "on-surface": "#e4e2e4",
+                      "on-primary-fixed-variant": "#930005"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0px",
+                      "lg": "0px",
+                      "xl": "0px",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Space Grotesk"],
+                      "body": ["Inter"],
+                      "label": ["Space Grotesk"]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-4 h-16 bg-[#131315] dark:bg-[#131315] shadow-[inset_0_-1px_0_0_rgba(255,59,48,0.2)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#FF3B30] dark:text-[#FF3B30]" data-icon="warning">warning</span>
+<h1 class="font-['Space_Grotesk'] tracking-tighter uppercase font-bold text-[#FF3B30] dark:text-[#FF3B30]">CRITICAL_INC_092: SLA 00:04:12</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-[#1b1b1d] hover:bg-[#2a2a2c] transition-colors text-[#FF3B30] px-4 py-1.5 font-['Space_Grotesk'] tracking-tighter uppercase font-bold ring-1 ring-[#FF3B30]/30 active:scale-[0.98]">
+                ESCALATE
+            </button>
+</div>
+</header>
+<main class="pt-20 pb-24 px-4 md:px-8 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Hero Section: SLA Countdown -->
+<section class="md:col-span-12 lg:col-span-8 bg-surface-container-low p-8 border-l-4 border-primary-container relative overflow-hidden flex flex-col justify-center min-h-[320px]">
+<div class="absolute top-4 right-4 opacity-20">
+<span class="font-label text-[10px] uppercase tracking-[0.3em]">NODE_ID: HQ-772</span>
+</div>
+<p class="font-headline text-primary-container uppercase tracking-widest text-sm mb-2">System Violation Imminent</p>
+<h2 class="font-headline text-6xl md:text-8xl font-bold tracking-tighter text-on-background leading-none">
+                SLA BREACH IN: <span class="text-primary-container drop-shadow-[0_0_15px_rgba(255,85,69,0.4)]">07:42</span>
+</h2>
+<div class="mt-8 flex gap-4">
+<button class="bg-primary-container text-on-primary-container px-8 py-3 font-headline font-bold uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all">
+                    EXECUTE ROLLBACK
+                </button>
+<button class="bg-surface-container-high text-on-surface px-8 py-3 font-headline font-bold uppercase tracking-wider hover:bg-surface-bright active:scale-95 transition-all">
+                    ASSIGN ENGINEER
+                </button>
+</div>
+<!-- Decorative Scanline -->
+<div class="absolute inset-0 pointer-events-none opacity-5 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]"></div>
+</section>
+<!-- Impact Summary Card -->
+<section class="md:col-span-12 lg:col-span-4 bg-surface-container-high p-8 flex flex-col justify-between border-t-2 border-secondary-container">
+<div class="flex justify-between items-start">
+<span class="font-label text-xs uppercase text-secondary tracking-widest">Blast Radius</span>
+<span class="material-symbols-outlined text-secondary" data-icon="groups">groups</span>
+</div>
+<div class="mt-4">
+<div class="font-headline text-5xl font-bold text-on-background">12,400</div>
+<div class="font-label text-sm uppercase text-on-surface-variant tracking-wider mt-1">Users Affected</div>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant/20">
+<div class="flex justify-between text-[10px] font-mono-data text-secondary uppercase">
+<span>Region: US-EAST-1</span>
+<span>Confidence: 98%</span>
+</div>
+</div>
+</section>
+<!-- Active Alert Card -->
+<section class="md:col-span-12 lg:col-span-5 bg-surface-container-low p-6 border-l-2 border-primary-container flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-primary-container animate-pulse"></div>
+<span class="font-headline font-bold uppercase tracking-widest text-on-surface text-sm">Active Alert: payments-api</span>
+</div>
+<span class="font-mono-data text-[10px] text-on-surface-variant">ID: 404-ERR-PAY</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-4 border-b border-primary-container/30">
+<div class="font-label text-[10px] uppercase text-on-surface-variant mb-1">Error Rate</div>
+<div class="font-headline text-3xl font-bold text-primary-container">43%</div>
+<div class="w-full bg-surface-variant h-1 mt-3">
+<div class="bg-primary-container h-full w-[43%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 border-b border-primary-container/30">
+<div class="font-label text-[10px] uppercase text-on-surface-variant mb-1">P99 Latency</div>
+<div class="font-headline text-3xl font-bold text-primary-container">4200ms</div>
+<div class="font-mono-data text-[10px] text-primary-container/70 mt-2">▲ 840% FROM BASELINE</div>
+</div>
+</div>
+<div class="bg-surface-container-highest/30 p-4">
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                    Root cause analysis indicates a potential deadlock in the <span class="text-secondary">postgres-primary</span> cluster following deployment <span class="text-tertiary">v2.44.1</span>.
+                </p>
+</div>
+</section>
+<!-- System Health Micro-charts -->
+<section class="md:col-span-12 lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- CPU Metric -->
+<div class="bg-surface-container-low p-5 flex flex-col justify-between group hover:bg-surface-container-high transition-colors">
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="font-label text-xs uppercase tracking-widest text-on-surface-variant">CPU Load</span>
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="memory">memory</span>
+</div>
+<div class="font-headline text-2xl font-bold text-on-surface">92.4%</div>
+</div>
+<div class="h-16 flex items-end gap-[2px] mt-4">
+<div class="bg-tertiary w-full h-[60%] opacity-40"></div>
+<div class="bg-tertiary w-full h-[65%] opacity-40"></div>
+<div class="bg-tertiary w-full h-[58%] opacity-40"></div>
+<div class="bg-tertiary w-full h-[85%] opacity-80"></div>
+<div class="bg-primary-container w-full h-[95%]"></div>
+<div class="bg-primary-container w-full h-[92%]"></div>
+</div>
+</div>
+<!-- Memory Metric -->
+<div class="bg-surface-container-low p-5 flex flex-col justify-between group hover:bg-surface-container-high transition-colors">
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Memory</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="storage">storage</span>
+</div>
+<div class="font-headline text-2xl font-bold text-on-surface">14.2GB</div>
+</div>
+<div class="h-16 flex items-end gap-[2px] mt-4">
+<div class="bg-secondary w-full h-[40%] opacity-40"></div>
+<div class="bg-secondary w-full h-[45%] opacity-40"></div>
+<div class="bg-secondary w-full h-[42%] opacity-40"></div>
+<div class="bg-secondary w-full h-[48%] opacity-60"></div>
+<div class="bg-secondary w-full h-[50%] opacity-80"></div>
+<div class="bg-secondary w-full h-[55%]"></div>
+</div>
+</div>
+<!-- Throughput Metric -->
+<div class="bg-surface-container-low p-5 flex flex-col justify-between group hover:bg-surface-container-high transition-colors">
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Throughput</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="speed">speed</span>
+</div>
+<div class="font-headline text-2xl font-bold text-primary">0.8k<span class="text-xs ml-1 text-on-surface-variant">req/s</span></div>
+</div>
+<div class="h-16 flex items-end gap-[2px] mt-4">
+<div class="bg-primary w-full h-[90%] opacity-30"></div>
+<div class="bg-primary w-full h-[85%] opacity-30"></div>
+<div class="bg-primary w-full h-[88%] opacity-30"></div>
+<div class="bg-primary w-full h-[40%] opacity-60"></div>
+<div class="bg-primary w-full h-[20%] opacity-80"></div>
+<div class="bg-primary-container w-full h-[12%]"></div>
+</div>
+</div>
+</section>
+<!-- Ticker/Logs Feed -->
+<section class="md:col-span-12 bg-surface-container-lowest p-6 border-y border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant">System Runtime Logs</span>
+<div class="h-[1px] flex-grow bg-outline-variant/10"></div>
+</div>
+<div class="space-y-2 font-mono-data text-[12px] leading-relaxed">
+<div class="flex gap-4 group">
+<span class="text-on-surface-variant w-24">[14:02:11]</span>
+<span class="text-secondary uppercase">DEPLOY_DETECTED:</span>
+<span class="text-on-surface">production-k8s-cluster-01. Version 14 mins ago.</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-on-surface-variant w-24">[14:04:32]</span>
+<span class="text-primary uppercase">RETRY_FAILURE:</span>
+<span class="text-on-surface">postgres-primary connection pool exhausted (300/300 connections).</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-on-surface-variant w-24">[14:05:01]</span>
+<span class="text-tertiary uppercase">AUTO_HEAL:</span>
+<span class="text-on-surface">Restarting pod payments-api-7c4f8...</span>
+</div>
+<div class="flex gap-4 group">
+<span class="text-on-surface-variant w-24">[14:06:55]</span>
+<span class="text-primary uppercase">CRITICAL:</span>
+<span class="text-on-surface">Health check failed for service 'auth-gateway'.</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-20 px-2 bg-[#1b1b1d] dark:bg-[#1b1b1d] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+<a class="flex flex-col items-center justify-center text-[#FF3B30] bg-[#2a2a2c] p-2 flex-1 animate-pulse" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-1">War Room</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-500 p-2 flex-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-1">Diagnostics</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-500 p-2 flex-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-1">Team</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-500 p-2 flex-1 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="campaign">campaign</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest mt-1">Updates</span>
+</a>
+</nav>
+<!-- Visual Overlay / Tactical Effects -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none z-[60] bg-[radial-gradient(circle_at_50%_50%,transparent_0%,rgba(19,19,21,0.4)_100%)]"></div>
+</body></html>

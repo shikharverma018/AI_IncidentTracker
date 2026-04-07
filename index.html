@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>KINETIC COMMAND | AI Incident Response</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 113, 102, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(255, 113, 102, 0.4); }
+        }
+        .animate-pulse-red {
+            animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 15px rgba(142, 255, 113, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(142, 255, 113, 0.4); }
+        }
+        .animate-pulse-green {
+            animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .glass-panel {
+            background: rgba(38, 38, 39, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        body {
+            background-color: #0e0e0f;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0e0e0f;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #484849;
+            border-radius: 10px;
+        }
+        .view-module {
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#5f580b",
+                    "surface-container-low": "#131314",
+                    "on-error": "#490006",
+                    "secondary-dim": "#e51a22",
+                    "surface-tint": "#8eff71",
+                    "surface-container": "#1a191b",
+                    "tertiary-fixed-dim": "#ece289",
+                    "on-secondary-container": "#fff6f4",
+                    "on-tertiary": "#676014",
+                    "on-secondary": "#4a0003",
+                    "primary-dim": "#2be800",
+                    "surface": "#0e0e0f",
+                    "on-background": "#ffffff",
+                    "on-secondary-fixed": "#700007",
+                    "surface-variant": "#262627",
+                    "inverse-surface": "#fcf8f9",
+                    "secondary-fixed": "#ffc3bd",
+                    "error-container": "#9f0519",
+                    "background": "#0e0e0f",
+                    "on-tertiary-fixed-variant": "#6b6418",
+                    "primary-container": "#2ff801",
+                    "outline-variant": "#484849",
+                    "inverse-on-surface": "#565556",
+                    "on-secondary-fixed-variant": "#a60010",
+                    "tertiary": "#fff9e4",
+                    "error": "#ff716c",
+                    "surface-dim": "#0e0e0f",
+                    "surface-container-high": "#201f21",
+                    "surface-container-highest": "#262627",
+                    "surface-container-lowest": "#000000",
+                    "on-primary-fixed-variant": "#0d6200",
+                    "on-tertiary-fixed": "#4d4700",
+                    "secondary": "#ff7166",
+                    "on-primary-container": "#0b5800",
+                    "primary-fixed": "#2ff801",
+                    "primary": "#8eff71",
+                    "error-dim": "#d7383b",
+                    "inverse-primary": "#106f00",
+                    "on-primary": "#0d6100",
+                    "tertiary-dim": "#ece289",
+                    "on-surface-variant": "#adaaab",
+                    "surface-bright": "#2c2c2d",
+                    "secondary-container": "#c00014",
+                    "tertiary-fixed": "#fbf195",
+                    "primary-fixed-dim": "#2be800",
+                    "on-error-container": "#ffa8a3",
+                    "tertiary-container": "#f8ee93",
+                    "on-primary-fixed": "#064200",
+                    "on-surface": "#ffffff",
+                    "secondary-fixed-dim": "#ffb0a7",
+                    "outline": "#767576"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Space Grotesk"],
+                    "mono": ["JetBrains Mono"]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-surface selection:bg-primary selection:text-on-primary">
+    <!-- Top Navigation Anchor (Functional) -->
+    <nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#0e0e0f]/80 backdrop-blur-xl shadow-[0_1px_20px_rgba(0,0,0,0.5)]">
+        <div class="flex items-center gap-4">
+            <span class="text-xl font-bold tracking-widest text-[#8eff71] drop-shadow-[0_0_8px_rgba(142,255,113,0.4)] font-['Space_Grotesk'] uppercase">KINETIC COMMAND</span>
+        </div>
+        <div class="hidden md:flex gap-8 items-center h-full" id="top-nav">
+            <a class="nav-link font-['Space_Grotesk'] tracking-tighter uppercase text-xs text-[#8eff71] border-b-2 border-[#8eff71] pb-1 active" href="#war-room" data-view="war-room" onclick="switchNav(this)">WAR ROOM</a>
+            <a class="nav-link font-['Space_Grotesk'] tracking-tighter uppercase text-xs text-[#adaaab] hover:text-white transition-colors" href="#system-map" data-view="system-map" onclick="switchNav(this)">SYSTEM MAP</a>
+            <a class="nav-link font-['Space_Grotesk'] tracking-tighter uppercase text-xs text-[#adaaab] hover:text-white transition-colors" href="#incident-logs" data-view="incident-logs" onclick="switchNav(this)">INCIDENT LOGS</a>
+            <a class="nav-link font-['Space_Grotesk'] tracking-tighter uppercase text-xs text-[#adaaab] hover:text-white transition-colors" href="#resources" data-view="resources" onclick="switchNav(this)">RESOURCES</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 bg-surface-variant/30 px-3 py-1 rounded border border-outline-variant/30 transition-all duration-500" id="incident-badge">
+                <span class="w-2 h-2 rounded-full bg-error animate-pulse" id="badge-dot"></span>
+                <span class="text-[10px] font-bold text-white uppercase tracking-widest" id="incident-status-text">P1 ACTIVE</span>
+            </div>
+            <span class="material-symbols-outlined text-[#adaaab] hover:text-white cursor-pointer">notifications_active</span>
+            <div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center border border-outline-variant">
+                <img alt="Operator Avatar" class="w-full h-full rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDiXZj9YDgLoBYxQDgm9WEbrD97WXao0Oph1twYNSk3IqWSjo67YHM7MUu1RrFRWldrXfhJw598P8Tcjc3FHNQj6xlA6MpqBlIt7Go0vBalQpmqyXWaeW4p_OeiaSWAOZN9vzp75wIyj0M_9qCB0Z0a67Qry372oFjcuF6xf_ngj1FQKKypdK83yDcf6VkzWsRuTuGvh2dkrILM7BkE8a0qkU8mQ4Lv40gTvYS0bKtnpL4z84TDb80t38qJXCrvYA_9CRQm39Tlqq4"/>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Side Navigation -->
+    <aside class="fixed left-0 top-16 h-[calc(100vh-64px)] z-40 flex flex-col items-center py-8 bg-[#0e0e0f] w-20 border-r border-[#484849]/20">
+        <div class="mb-8 flex flex-col items-center">
+            <span class="font-['Space_Grotesk'] font-black text-[#8eff71] text-xs">OPS</span>
+        </div>
+        <div class="flex flex-col gap-6 w-full items-center" id="side-nav">
+            <button class="w-full py-3 flex flex-col items-center gap-1 text-[#8eff71] bg-[#1a191b] shadow-[inset_4px_0_0_0_#8eff71] nav-btn active" data-view="war-room" data-tooltip="Ops / Terminal" onclick="switchSideNav(this, 'war-room')">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+            </button>
+            <button class="w-full py-3 flex flex-col items-center gap-1 text-[#adaaab] hover:bg-[#2c2c2d] hover:text-[#8eff71] nav-btn" data-view="network" data-tooltip="Network Scanner" onclick="switchSideNav(this, 'network')">
+                <span class="material-symbols-outlined">travel_explore</span>
+            </button>
+            <button class="w-full py-3 flex flex-col items-center gap-1 text-[#adaaab] hover:bg-[#2c2c2d] hover:text-[#8eff71] nav-btn" data-view="firewall" data-tooltip="Firewall Monitor" onclick="switchSideNav(this, 'firewall')">
+                <span class="material-symbols-outlined">shield_with_heart</span>
+            </button>
+            <button class="w-full py-3 flex flex-col items-center gap-1 text-[#adaaab] hover:bg-[#2c2c2d] hover:text-[#8eff71] nav-btn" data-view="threats" data-tooltip="Threat Analysis" onclick="switchSideNav(this, 'threats')">
+                <span class="material-symbols-outlined">query_stats</span>
+            </button>
+            <button class="w-full py-3 flex flex-col items-center gap-1 text-[#adaaab] hover:bg-[#2c2c2d] hover:text-[#8eff71] nav-btn" data-view="settings" data-tooltip="Config / Settings" onclick="switchSideNav(this, 'settings')">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+        </div>
+        <div class="mt-auto mb-4 flex flex-col items-center gap-4">
+            <select id="scenario-select" class="hidden">
+                <option value="0">S1</option><option value="1">S2</option><option value="2">S3</option><option value="3">S4</option>
+                <option value="4">S5</option><option value="5">S6</option><option value="6">S7</option><option value="7">S8</option>
+                <option value="8">S9</option><option value="9">S10</option><option value="10">S11</option><option value="11">S12</option>
+                <option value="12">S13</option><option value="13">S14</option><option value="14">S15</option><option value="15">S16</option>
+                <option value="16">S17</option><option value="17">S18</option><option value="18">S19</option><option value="19">S20</option>
+                <option value="20">S21</option><option value="21">S22</option><option value="22">S23</option><option value="23">S24</option>
+                <option value="24">S25</option><option value="25">S26</option><option value="26">S27</option><option value="27">S28</option>
+                <option value="28">S29</option><option value="29">S30</option>
+            </select>
+            <div class="w-10 h-10 border border-primary/40 bg-primary/10 rounded flex items-center justify-center text-primary font-mono text-[10px] cursor-pointer hover:bg-primary/20 transition-all font-bold" id="current-scenario-label" onclick="openScenarioPicker()">S1</div>
+        </div>
+    </aside>
+
+    <!-- Main Command Canvas -->
+    <main class="ml-20 mt-16 p-4 h-[calc(100vh-64px)] overflow-y-auto">
+        
+        <!-- View 1: War Room (User's Aesthetic Snippet) -->
+        <div id="view-war-room" class="view-module grid grid-cols-12 gap-4">
+            <!-- Header Breach Bar -->
+            <div class="col-span-12">
+                <div class="w-full bg-[#9f0519]/20 border border-[#ff716c]/30 rounded-xl p-4 flex items-center justify-between animate-pulse-red">
+                    <div class="flex items-center gap-4">
+                        <div class="w-2 h-2 rounded-full bg-error shadow-[0_0_8px_#ff716c]"></div>
+                        <span class="font-headline font-bold text-lg tracking-[0.2em] text-error uppercase">CRITICAL SYSTEM BREACH DETECTED</span>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <span class="text-on-surface-variant font-label text-xs uppercase tracking-widest">SLA BREACH IN:</span>
+                        <span class="font-mono font-bold text-4xl text-error drop-shadow-[0_0_12px_rgba(255,113,108,0.5)]" id="sla-time">04:32:18</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="bg-secondary-container text-on-secondary-container px-6 py-2 rounded font-headline text-xs font-bold tracking-widest hover:brightness-125 transition-all uppercase">System Diagnostic Running</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Left Column: Intelligence -->
+            <div class="col-span-3 flex flex-col gap-4">
+                <section class="bg-surface-container rounded-xl p-4 border border-outline-variant/10">
+                    <h3 class="text-on-surface-variant font-headline text-[10px] font-bold tracking-widest uppercase mb-4">Root Cause Hypothesis</h3>
+                    <div class="space-y-4" id="hypothesis-panel">
+                        <div class="space-y-1" id="hyp-deploy">
+                            <div class="flex justify-between text-xs font-mono">
+                                <span class="text-on-surface">Deploy Issue</span>
+                                <span class="text-primary" id="hyp-value-deploy">60%</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                                <div class="h-full bg-primary hyp-bar" id="hyp-bar-deploy" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-1" id="hyp-db">
+                            <div class="flex justify-between text-xs font-mono">
+                                <span class="text-on-surface">DB Pool Leak</span>
+                                <span class="text-primary" id="hyp-value-db">40%</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                                <div class="h-full bg-primary hyp-bar" id="hyp-bar-db" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-1 opacity-50">
+                            <div class="flex justify-between text-xs font-mono">
+                                <span class="text-on-surface">Memory Leak</span>
+                                <span class="text-on-surface-variant">12%</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                                <div class="h-full bg-outline w-[12%]"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="space-y-3">
+                    <div class="bg-surface-container-high rounded-xl p-4 border-l-4 border-error metric-card" id="metric-error-rate">
+                        <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter">Error Rate</p>
+                        <div class="flex items-end justify-between">
+                            <span class="text-2xl font-mono font-bold text-error" id="error-rate-value">8.9%</span>
+                            <div class="w-20 h-4 flex items-end gap-0.5">
+                                <div class="bg-error w-1 h-1"></div><div class="bg-error w-1 h-3"></div><div class="bg-error w-1 h-2"></div><div class="bg-error w-1 h-4"></div><div class="bg-error w-1 h-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-surface-container-high rounded-xl p-4 border-l-4 border-primary metric-card" id="metric-latency">
+                        <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter">Latency</p>
+                        <div class="flex items-end justify-between">
+                            <span class="text-2xl font-mono font-bold text-primary" id="latency-value">441ms</span>
+                            <div class="w-20 h-4 flex items-end gap-0.5">
+                                <div class="bg-primary w-1 h-2"></div><div class="bg-primary w-1 h-1"></div><div class="bg-primary w-1 h-3"></div><div class="bg-primary w-1 h-4"></div><div class="bg-primary w-1 h-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-surface-container-high rounded-xl p-4 border-l-4 border-tertiary metric-card" id="metric-users">
+                        <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter">Affected Users</p>
+                        <div class="flex items-end justify-between">
+                            <span class="text-2xl font-mono font-bold text-tertiary" id="users-value">496</span>
+                            <div class="w-20 h-4 flex items-end gap-0.5">
+                                <div class="bg-tertiary w-1 h-3"></div><div class="bg-tertiary w-1 h-4"></div><div class="bg-tertiary w-1 h-2"></div><div class="bg-tertiary w-1 h-1"></div><div class="bg-tertiary w-1 h-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-surface-container rounded-xl p-4 flex-grow relative overflow-hidden border border-outline-variant/10">
+                    <h3 class="text-on-surface-variant font-headline text-[10px] font-bold tracking-widest uppercase mb-4">Topology Map</h3>
+                    <div class="relative h-48 w-full flex items-center justify-center">
+                        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#8eff71_1px,transparent_1px)] [background-size:20px_20px]"></div>
+                        <div class="relative z-10 grid grid-cols-3 gap-6">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded border border-primary bg-primary/20 flex items-center justify-center shadow-[0_0_10px_#8eff7133]">
+                                    <span class="material-symbols-outlined text-primary text-sm">dns</span>
+                                </div>
+                                <span class="text-[8px] mt-1 font-mono text-primary uppercase">Edge_1</span>
+                            </div>
+                            <div class="flex flex-col items-center translate-y-4">
+                                <div class="w-8 h-8 rounded border border-error bg-error/20 flex items-center justify-center shadow-[0_0_10px_#ff716c33]">
+                                    <span class="material-symbols-outlined text-error text-sm" style="font-variation-settings: 'FILL' 1;">router</span>
+                                </div>
+                                <span class="text-[8px] mt-1 font-mono text-error uppercase">Core_0</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded border border-primary bg-primary/20 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-primary text-sm">database</span>
+                                </div>
+                                <span class="text-[8px] mt-1 font-mono text-primary uppercase">DB_Cluster</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Center Column: Agent Engine -->
+            <div class="col-span-6 flex flex-col gap-4">
+                <section class="bg-surface-container-low rounded-xl p-6 flex flex-col flex-grow border border-outline-variant/10 relative overflow-hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-on-surface font-headline font-bold text-sm tracking-widest uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            Agent Action Feed
+                        </h3>
+                        <div class="bg-surface-bright px-3 py-1 rounded-full text-[10px] font-mono text-on-surface-variant uppercase tracking-widest" id="step-counter">
+                            Step <span class="text-primary font-bold">0</span> / 15
+                        </div>
+                    </div>
+                    
+                    <!-- Thinking State (Upper Overlay with Blur) -->
+                    <div class="hidden absolute top-[15%] left-1/2 -translate-x-1/2 w-[90%] z-20 p-4 bg-surface-container-highest/80 backdrop-blur-md border border-primary/30 rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.4)] animate-fade-in" id="thinking-indicator">
+                        <div class="flex items-center gap-4">
+                            <div class="flex-shrink-0 relative">
+                                <div class="w-2 h-2 rounded-full bg-primary animate-ping absolute inset-0"></div>
+                                <div class="w-2 h-2 rounded-full bg-primary relative"></div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between items-center">
+                                    <p class="text-[10px] font-black text-primary uppercase tracking-[0.2em] thinking-text">Analyzing Telemetry...</p>
+                                    <div class="flex gap-1">
+                                        <div class="w-1 h-1 bg-primary rounded-full animate-bounce"></div>
+                                        <div class="w-1 h-1 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                                        <div class="w-1 h-1 bg-primary rounded-full animate-bounce [animation-delay:-0.5s]"></div>
+                                    </div>
+                                </div>
+                                <p class="text-[9px] text-on-surface-variant uppercase mt-1 tracking-widest leading-none">Cross-referencing failure patterns in core clusters...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-grow space-y-4 overflow-y-auto pr-2 custom-scrollbar" id="action-feed">
+                        <!-- Simulation Timeline populates here -->
+                        <div class="flex items-center justify-center h-full opacity-20 flex-col gap-4 text-center">
+                            <span class="material-symbols-outlined text-4xl">robot</span>
+                            <span class="text-[10px] uppercase tracking-widest font-headline">Agent Standby — Awaiting Selection</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: Operations -->
+            <div class="col-span-3 flex flex-col gap-4">
+                <!-- Active Alerts -->
+                <section class="bg-surface-container rounded-xl p-4 border border-outline-variant/10">
+                    <h3 class="text-on-surface-variant font-headline text-[10px] font-bold tracking-widest uppercase mb-4 flex justify-between">
+                        Active Alerts
+                        <span id="alert-count" class="text-error">3</span>
+                    </h3>
+                    <div class="space-y-2" id="alerts-list">
+                        <div class="bg-error-container/20 p-2 rounded flex items-center justify-between border border-error/20">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[9px] bg-error text-on-error px-1 font-black rounded uppercase">CRIT</span>
+                                <span class="text-[10px] font-mono text-on-surface uppercase">API_5XX_SPIKE</span>
+                            </div>
+                            <span class="text-[9px] text-on-surface-variant">2m ago</span>
+                        </div>
+                        <div class="bg-secondary-container/10 p-2 rounded flex items-center justify-between border border-secondary/20">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[9px] bg-secondary text-on-secondary px-1 font-black rounded uppercase">WARN</span>
+                                <span class="text-[10px] font-mono text-on-surface uppercase">Disk_Util_85</span>
+                            </div>
+                            <span class="text-[9px] text-on-surface-variant">14m ago</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Squad Status -->
+                <section class="bg-surface-container rounded-xl p-4 border border-outline-variant/10">
+                    <h3 class="text-on-surface-variant font-headline text-[10px] font-bold tracking-widest uppercase mb-4 text-center">Operational Squad</h3>
+                    <div class="space-y-3" id="team-grid">
+                        <!-- Dynamically Populated via RenderSquad() -->
+                    </div>
+                </section>
+
+                <section class="bg-[#1a191b] rounded-xl p-6 border-2 border-primary/20 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-on-surface-variant font-headline text-[10px] font-bold tracking-widest uppercase mb-2">Live Reward Tracker</h3>
+                    <div class="text-5xl font-mono font-black text-primary drop-shadow-[0_0_15px_rgba(142,255,113,0.3)]" id="reward-value">
+                        0.00
+                    </div>
+                    <p class="text-[9px] text-on-surface-variant mt-2 font-mono uppercase tracking-tighter">Status: Active Optimization</p>
+                </section>
+            </div>
+        </div>
+
+        <!-- View 2: System Map -->
+        <div id="view-system-map" class="view-module hidden flex flex-col items-center justify-center min-h-[60vh] p-10 bg-surface-container/20 rounded-2xl border border-outline-variant/30">
+            <h2 class="text-2xl font-headline font-bold text-primary mb-8 tracking-widest uppercase">Expanded System Topology</h2>
+            <div class="grid grid-cols-3 gap-12 relative p-20 border border-primary/10 rounded-3xl" id="map-diagram">
+                <div class="flex flex-col items-center group" id="node-api">
+                    <div class="map-node w-16 h-16 rounded-xl bg-surface-variant flex items-center justify-center border-2 border-primary group-hover:shadow-[0_0_20px_#8eff7155] transition-all">
+                        <span class="material-symbols-outlined text-3xl">dns</span>
+                    </div>
+                    <span class="mt-2 text-[10px] font-mono text-primary uppercase">API_Gateway</span>
+                </div>
+                <div class="flex flex-col items-center group" id="node-core">
+                    <div class="map-node w-16 h-16 rounded-xl bg-surface-variant flex items-center justify-center border-2 border-primary group-hover:shadow-[0_0_20px_#8eff7155] transition-all">
+                        <span class="material-symbols-outlined text-3xl">router</span>
+                    </div>
+                    <span class="mt-2 text-[10px] font-mono text-primary uppercase">Core_Micro</span>
+                </div>
+                <div class="flex flex-col items-center group" id="node-db">
+                    <div class="map-node w-16 h-16 rounded-xl bg-surface-variant flex items-center justify-center border-2 border-primary group-hover:shadow-[0_0_20px_#8eff7155] transition-all">
+                        <span class="material-symbols-outlined text-3xl">database</span>
+                    </div>
+                    <span class="mt-2 text-[10px] font-mono text-primary uppercase">DB_Cluster</span>
+                </div>
+                <div class="absolute top-1/2 left-1/4 w-[12%] h-0.5 bg-primary/20 -translate-y-1/2"></div>
+                <div class="absolute top-1/2 left-1/2 w-[12%] h-0.5 bg-primary/20 -translate-y-1/2 ml-10"></div>
+            </div>
+            <div class="mt-12 text-center text-xs text-on-surface-variant max-w-md uppercase tracking-widest">
+                <p>Status: <span class="text-primary font-bold">All Systems Synced</span></p>
+                <p class="opacity-50 mt-2">Real-time health probes active for all sectors.</p>
+            </div>
+        </div>
+
+        <!-- View 3: Incident Logs -->
+        <div id="view-incident-logs" class="view-module hidden h-full flex flex-col p-6 bg-[#050505] rounded-xl border border-outline-variant/30 font-mono relative overflow-hidden">
+            <!-- Scanline Overlay Effect -->
+            <div class="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_2px,3px_100%] z-10 opacity-20"></div>
+            
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-outline-variant/20 relative z-20">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-error animate-pulse shadow-[0_0_8px_#ff716c]"></span>
+                    <span class="text-[10px] text-error font-extrabold tracking-[0.2em] uppercase">Tactical Log Stream</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span id="log-timestamp" class="text-[9px] text-[#adaaab] font-bold tracking-widest uppercase">Initializing...</span>
+                    <button onclick="window.clearLogs()" class="text-[9px] bg-white/5 hover:bg-white/10 px-2 py-1 rounded border border-white/10 text-on-surface-variant uppercase tracking-tighter transition-all hover:text-white">Clear Stream</button>
+                </div>
+            </div>
+            <div id="log-container" class="flex-grow overflow-y-auto flex flex-col gap-1 pr-2 text-[11px] custom-scrollbar relative z-20">
+                <div class="flex items-center justify-center h-full opacity-20 text-[10px] uppercase tracking-[0.3em] animate-pulse">Establishing Connection...</div>
+            </div>
+        </div>
+
+        <!-- View 4: Resources -->
+        <div id="view-resources" class="view-module hidden h-full grid grid-cols-2 gap-6 p-6">
+            <div class="bg-surface-container rounded-xl p-8 border border-outline-variant/10 space-y-8">
+                <h3 class="text-xs font-bold text-primary tracking-widest uppercase">Infrastructure Load</h3>
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-on-surface uppercase">CPU Utilization</span>
+                            <span class="text-primary" id="res-cpu-val">12%</span>
+                        </div>
+                        <div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" id="res-cpu-bar" style="width: 12%"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-on-surface uppercase">Memory Usage</span>
+                            <span class="text-primary" id="res-mem-val">45%</span>
+                        </div>
+                        <div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" id="res-mem-bar" style="width: 45%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-surface-container rounded-xl p-8 border border-outline-variant/10 space-y-8">
+                <h3 class="text-xs font-bold text-secondary tracking-widest uppercase">I/O Dynamics</h3>
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-on-surface uppercase">Disk Write Latency</span>
+                            <span class="text-primary" id="res-disk-val">8%</span>
+                        </div>
+                        <div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" id="res-disk-bar" style="width: 8%"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-on-surface uppercase">Network Ingress</span>
+                            <span class="text-primary" id="res-net-val">22%</span>
+                        </div>
+                        <div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" id="res-net-bar" style="width: 22%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 5: Network Scanner Dashboard (NEW) -->
+        <div id="view-network" class="view-module hidden h-full grid grid-cols-12 gap-6 p-6">
+            <div class="col-span-12 flex items-center justify-between bg-surface-container p-6 rounded-xl border border-outline-variant/10">
+                <h3 class="text-lg font-bold text-primary tracking-widest uppercase flex items-center gap-3">
+                    <span class="material-symbols-outlined">travel_explore</span>
+                    Internal Network Scanner
+                </h3>
+                <div class="flex gap-4">
+                    <button id="btn-run-scan" class="px-6 py-2 bg-primary text-on-primary rounded font-bold text-xs uppercase hover:brightness-110 transition-all flex items-center gap-2" onclick="startNetworkScan()">
+                        <span class="material-symbols-outlined text-sm">wifi_tethering</span> Run Full Scan
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-span-8 bg-surface-container rounded-xl p-8 border border-outline-variant/10 flex flex-col gap-6">
+                <div id="scan-progress-container" class="hidden space-y-4">
+                    <div class="flex justify-between items-center text-xs font-mono">
+                        <span class="text-on-surface">Scanning Active Subnets...</span>
+                        <span id="scan-percentage" class="text-primary">0%</span>
+                    </div>
+                    <div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+                        <div id="scan-progress-bar" class="h-full bg-primary" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="flex-grow overflow-y-auto custom-scrollbar" id="scan-results-list">
+                    <div class="flex flex-col items-center justify-center h-full opacity-20 text-center gap-4">
+                        <span class="material-symbols-outlined text-6xl">search_check</span>
+                        <p class="text-xs uppercase tracking-widest font-headline">Scanner Standby — Awaiting Command</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-span-4 space-y-4">
+                <div class="bg-surface-container-high rounded-xl p-4 border border-outline-variant/10">
+                    <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter mb-4">Scanner Meta</p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-[10px]">
+                            <span class="text-on-surface-variant">Mode</span>
+                            <span class="text-primary font-mono uppercase">Deep Inspection</span>
+                        </div>
+                        <div class="flex justify-between text-[10px]">
+                            <span class="text-on-surface-variant">Range</span>
+                            <span class="text-on-surface font-mono">192.168.1.0/24</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 6: Firewall Monitor Dashboard (Refactored View 5) -->
+        <div id="view-firewall" class="view-module hidden h-full grid grid-cols-12 gap-6 p-6">
+            <div class="col-span-12 flex items-center justify-between bg-surface-container p-6 rounded-xl border border-outline-variant/10">
+                <h3 class="text-lg font-bold text-secondary tracking-widest uppercase flex items-center gap-3">
+                    <span class="material-symbols-outlined">shield_with_heart</span>
+                    Firewall Command Center
+                </h3>
+                <div class="flex gap-4">
+                    <div class="flex items-center gap-2 px-4 py-2 bg-on-secondary/10 rounded border border-secondary/20">
+                        <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                        <span class="text-[10px] text-secondary font-bold uppercase tracking-widest">LIVE TRAFFIC ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-span-12 grid grid-cols-3 gap-4">
+                <div class="bg-surface-container-high p-4 rounded-xl border border-outline-variant/10">
+                    <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter mb-1">Blocked Reqs</p>
+                    <span id="fw-blocked-count" class="text-4xl font-mono font-black text-secondary">0</span>
+                </div>
+                <div class="bg-surface-container-high p-4 rounded-xl border border-outline-variant/10">
+                    <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter mb-1">Allowed Traffic</p>
+                    <span id="fw-allowed-count" class="text-4xl font-mono font-black text-primary">0</span>
+                </div>
+                <div class="bg-surface-container-high p-4 rounded-xl border border-outline-variant/10">
+                    <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter mb-1">Threat Level</p>
+                    <span class="text-4xl font-mono font-black text-tertiary">LOW</span>
+                </div>
+            </div>
+
+            <div class="col-span-12 bg-[#050505] rounded-xl p-6 border border-outline-variant/30 flex flex-col h-80">
+                <h4 class="text-xs font-bold text-secondary tracking-widest uppercase mb-4 border-b border-secondary/20 pb-2">Suspicious Traffic Log (Real-time)</h4>
+                <div id="firewall-logs" class="flex-grow overflow-y-auto custom-scrollbar space-y-2 text-[10px] font-mono"></div>
+            </div>
+        </div>
+
+        <!-- View 7: Threat Analysis -->
+        <div id="view-threats" class="view-module hidden h-full grid grid-cols-12 gap-6 p-6">
+            <div class="col-span-12 flex items-center justify-between bg-surface-container p-6 rounded-xl border border-outline-variant/10">
+                <h3 class="text-lg font-bold text-tertiary-dim tracking-widest uppercase flex items-center gap-3">
+                    <span class="material-symbols-outlined">query_stats</span>
+                    Threat Analysis Engine
+                </h3>
+                <div class="flex items-center gap-2 px-4 py-2 bg-on-tertiary/10 rounded border border-tertiary-dim/20">
+                    <span class="w-2 h-2 rounded-full bg-tertiary-dim animate-pulse"></span>
+                    <span class="text-[10px] text-tertiary-dim font-bold uppercase tracking-widest">MONITORING</span>
+                </div>
+            </div>
+
+            <div class="col-span-4 flex flex-col gap-4">
+                <div class="bg-surface-container-high rounded-xl p-6 border-l-4 border-error">
+                    <p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest mb-2">Total Threats Detected</p>
+                    <span id="threat-total-count" class="text-5xl font-mono font-black text-white">0</span>
+                </div>
+                <div class="bg-surface-container-high rounded-xl p-6 border-l-4 border-tertiary-dim flex-grow flex flex-col justify-center text-center relative overflow-hidden">
+                    <p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest mb-4">Current Risk Level</p>
+                    <div id="threat-risk-level" class="text-4xl font-mono font-black text-primary drop-shadow-[0_0_12px_rgba(142,255,113,0.4)]">LOW</div>
+                </div>
+                <div class="bg-surface-container-high rounded-xl p-6 border-l-4 border-primary">
+                    <p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest mb-2">Active Anomalies</p>
+                    <span id="threat-anomalies-count" class="text-5xl font-mono font-black text-primary">0</span>
+                </div>
+            </div>
+
+            <div class="col-span-8 bg-[#050505] rounded-xl border border-outline-variant/30 flex flex-col overflow-hidden">
+                <div class="p-4 border-b border-outline-variant/20 flex justify-between items-center bg-surface-container">
+                    <h4 class="text-xs font-bold text-white tracking-widest uppercase">Live Threat Vector Logs</h4>
+                    <div id="threat-graph-bars" class="flex gap-1 items-end h-8 overflow-hidden w-40 justify-end"></div>
+                </div>
+                <div id="threat-log-list" class="flex-grow p-4 overflow-y-auto custom-scrollbar space-y-2">
+                    <div class="flex flex-col items-center justify-center h-full opacity-20 gap-4 text-center">
+                        <span class="material-symbols-outlined text-4xl">radar</span>
+                        <p class="text-[10px] font-mono tracking-widest uppercase">SCANNING ENVIRONMENT INTERFACES...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 8: Settings / Config -->
+        <div id="view-settings" class="view-module hidden h-full flex flex-col p-6 overflow-y-auto custom-scrollbar gap-6">
+            <div class="flex items-center justify-between border-b border-outline-variant/30 pb-4 mb-2">
+                <h3 class="text-2xl font-bold text-white uppercase tracking-[4px] flex items-center gap-3">
+                    <span class="material-symbols-outlined text-on-surface-variant">settings</span>
+                    System Configuration
+                </h3>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Section 1: System Controls -->
+                <div class="bg-surface-container p-6 rounded-xl border border-outline-variant/10 space-y-6">
+                    <h4 class="text-xs font-bold text-primary tracking-widest uppercase border-b border-primary/20 pb-2">1. Interface & Comm Controls</h4>
+                    
+                    <div class="flex justify-between items-center bg-surface-variant/20 p-4 rounded-lg">
+                        <div>
+                            <p class="text-sm font-bold text-white uppercase tracking-widest">Cyber Dark Theme</p>
+                            <p class="text-[10px] text-on-surface-variant uppercase mt-1">Force contrast mode for operator UI</p>
+                        </div>
+                        <input type="checkbox" id="toggle-dark-mode" class="cyber-toggle" checked>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-surface-variant/20 p-4 rounded-lg">
+                        <div>
+                            <p class="text-sm font-bold text-white uppercase tracking-widest">Global P1 Alerts</p>
+                            <p class="text-[10px] text-on-surface-variant uppercase mt-1">Push notifications on threshold breach</p>
+                        </div>
+                        <input type="checkbox" id="toggle-alerts" class="cyber-toggle" checked>
+                    </div>
+                </div>
+
+                <!-- Section 3: Security Settings -->
+                <div class="bg-surface-container p-6 rounded-xl border border-outline-variant/10 space-y-6">
+                    <h4 class="text-xs font-bold text-secondary tracking-widest uppercase border-b border-secondary/20 pb-2">3. Security Matrix</h4>
+                    
+                    <div class="flex justify-between items-center bg-error/5 p-4 rounded-lg border border-error/10">
+                        <div>
+                            <p class="text-sm font-bold text-white uppercase tracking-widest">Strict Firewall Mode</p>
+                            <p class="text-[10px] text-error uppercase mt-1">Drop unknown ingress packets instantly</p>
+                        </div>
+                        <input type="checkbox" id="toggle-firewall" class="cyber-toggle">
+                    </div>
+
+                    <div class="flex justify-between items-center bg-surface-variant/20 p-4 rounded-lg">
+                        <div>
+                            <p class="text-sm font-bold text-white uppercase tracking-widest">Automated Deep Scan</p>
+                            <p class="text-[10px] text-on-surface-variant uppercase mt-1">Run subnet mapping routine automatically</p>
+                        </div>
+                        <input type="checkbox" id="toggle-autoscan" class="cyber-toggle">
+                    </div>
+                </div>
+
+                <!-- Section 2: Simulation Settings -->
+                <div class="col-span-2 bg-surface-container p-6 rounded-xl border border-outline-variant/10 space-y-6">
+                    <h4 class="text-xs font-bold text-tertiary-dim tracking-widest uppercase border-b border-tertiary-dim/20 pb-2">2. Environment Simulation</h4>
+                    
+                    <div class="grid grid-cols-2 gap-8 items-center bg-surface-variant/20 p-6 rounded-lg">
+                        <div>
+                            <p class="text-sm font-bold text-white uppercase tracking-widest">Simulation Speed Factor</p>
+                            <p class="text-[10px] text-on-surface-variant uppercase mt-1 mb-4">Adjust agent decision loop latency</p>
+                            <div class="flex justify-between items-center pr-2 mb-2">
+                                <span class="text-[10px] font-bold text-on-surface uppercase tracking-widest">Current Speed</span>
+                                <span class="text-[14px] font-mono font-black text-primary" id="settings-speed-display">1.5s</span>
+                            </div>
+                            <input type="range" id="settings-speed-slider" min="500" max="3000" value="1500" step="250" class="w-full h-1.5 bg-surface-container-high rounded-full appearance-none cursor-pointer accent-primary outline-none focus:outline-primary/50">
+                        </div>
+                        
+                        <div class="flex flex-col items-end border-l border-outline-variant/20 pl-8">
+                            <p class="text-[10px] text-right text-on-surface-variant uppercase mb-4 max-w-[200px]">Warning: Resetting state clears logs, telemetry, and agent hypotheses.</p>
+                            <button id="btn-settings-reset" class="px-6 py-3 bg-surface-variant text-error font-black uppercase tracking-[0.2em] text-xs shadow-lg hover:bg-error/20 hover:border-error/50 transition-all border border-error/20 rounded flex items-center justify-center gap-2 w-full max-w-[250px]">
+                                <span class="material-symbols-outlined text-sm">restart_alt</span> Reset System State
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Simulation Controls (Floating Bottom Navigation) -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center gap-8 glass-panel px-10 py-3 rounded-full border border-outline-variant/30 shadow-[0_0_30px_rgba(0,0,0,0.6)]">
+        <div class="flex items-center gap-4 border-r border-outline-variant/30 pr-8">
+            <button class="flex flex-col items-center gap-1 group" id="btn-start" onclick="startSimulation()">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary text-on-primary shadow-[0_0_15px_#8eff7188] group-active:scale-95 transition-all group-disabled:opacity-20">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                </div>
+                <span class="text-[9px] font-headline font-bold text-primary tracking-widest uppercase">Start</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 group" id="btn-reset" onclick="resetSimulation()" disabled>
+                <div class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-bright text-on-surface-variant hover:text-white transition-all group-active:scale-95 group-disabled:opacity-20">
+                    <span class="material-symbols-outlined">restart_alt</span>
+                </div>
+                <span class="text-[9px] font-headline font-bold text-on-surface-variant tracking-widest uppercase">Reset</span>
+            </button>
+        </div>
+        
+        <div class="flex flex-col gap-1 min-w-[200px]">
+            <div class="flex justify-between items-center pr-2">
+                <span class="text-[10px] font-bold text-on-surface uppercase tracking-widest">Sim Speed</span>
+                <span class="text-[10px] font-mono text-primary" id="speed-display">1.5s</span>
+            </div>
+            <input type="range" id="speed-slider" min="500" max="3000" value="1500" step="250" class="w-full h-1.5 bg-surface-container rounded-full appearance-none cursor-pointer accent-primary">
+        </div>
+
+        <div class="flex items-center gap-6 border-l border-outline-variant/30 pl-8">
+            <button id="scenarios-btn" class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-all" onclick="openScenarioPicker()">
+                <span class="material-symbols-outlined">tune</span>
+                <span class="text-[9px] font-headline font-bold tracking-widest uppercase">SCENARIOS</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modals & Overlays -->
+    <div class="hidden" id="scenario-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2147483647; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="bg-[#121212] border border-[#8eff71]/30 p-8 rounded-2xl w-full max-w-5xl h-[80vh] flex flex-col shadow-[0_0_50px_rgba(142,255,113,0.1)]">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-headline font-bold text-primary tracking-widest uppercase">SCENARIO LIBRARY | Selection</h2>
+                <button class="w-10 h-10 rounded-full bg-white/5 hover:bg-error/20 hover:text-error flex items-center justify-center transition-all" onclick="closeScenarioPicker()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="grid grid-cols-3 gap-4 overflow-y-auto pr-4 custom-scrollbar flex-1" id="scenario-list-container">
+                <!-- Javascript will inject 20 scenarios here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="victory-overlay hidden fixed inset-0 z-[100] bg-black/90 flex items-center justify-center backdrop-blur-md" id="victory-overlay">
+        <div class="bg-surface-container border border-primary/30 p-10 rounded-2xl text-center max-w-md w-full animate-pulse-green">
+            <div class="text-6xl mb-4" id="victory-icon">🎉</div>
+            <h2 class="text-2xl font-headline font-bold text-primary mb-2 tracking-widest uppercase" id="victory-title">INCIDENT RESOLVED</h2>
+            <p class="text-sm text-on-surface-variant mb-8" id="victory-subtitle">The agent successfully contained the threat.</p>
+            <div class="space-y-4 mb-8" id="victory-stats"></div>
+            <button class="w-full bg-primary text-on-primary py-3 rounded font-black tracking-widest uppercase" onclick="closeVictory()">Review Operation</button>
+        </div>
+    </div>
+
+    <div class="mistake-flash fixed top-24 left-1/2 -translate-x-1/2 z-[90] opacity-0 pointer-events-none transition-all duration-300" id="mistake-flash">
+        <div class="bg-error text-on-error px-6 py-3 rounded-full shadow-[0_0_20px_#ff716c] flex items-center gap-3 border border-white/20">
+            <span class="material-symbols-outlined">warning</span>
+            <span class="text-xs font-black tracking-widest uppercase" id="mistake-text">SYSTEM DEGRADATION</span>
+        </div>
+    </div>
+
+    <script>
+        // ─── Direct Fail-Proof Scenario Logic ───
+        const SCENARIOS = [
+            { id: "S1", name: "Connection Pool Saturation", type: "DB", mistakesNeeded: 2, desc: "Database connections exhausted due to unoptimized ORM queries." },
+            { id: "S2", name: "Poisoned Cache Ripple", type: "Cache", mistakesNeeded: 2, desc: "Invalid serialized data in Redis causing deserialization errors." },
+            { id: "S3", name: "Third-Party API Latency", type: "Ex", mistakesNeeded: 0, desc: "Stripe API responding with 5s latency, triggering cascades." },
+            { id: "S4", name: "Silent DNS Dropdown", type: "Net", mistakesNeeded: 2, desc: "Internal DNS flapping causing intermittent resolution failures." },
+            { id: "S5", name: "Feature Flag Chaos", type: "App", mistakesNeeded: 2, desc: "Experimental search algorithm causing 100% CPU lock." },
+            { id: "S6", name: "Emergency: OOM Spike", type: "Infra", mistakesNeeded: 4, desc: "Memory leak in Java worker heap after batch uploads." },
+            { id: "S7", name: "Kafka Queue Jam", type: "Queue", mistakesNeeded: 2, desc: "Leader rebalance failure in Kafka cluster causing stalls." },
+            { id: "S8", name: "Misfiring Circuit Breaker", type: "App", mistakesNeeded: 0, desc: "Resilience4j breaker stuck in OPEN state despite healthy checks." },
+            { id: "S9", name: "Chaos Mode: Mixed Signals", type: "Mixed", mistakesNeeded: 3, desc: "Simultaneous disk pressure and network partitioning." },
+            { id: "S10", name: "Auth Token Disaster", type: "Sec", mistakesNeeded: 2, desc: "JWT verification public key rotated prematurely." },
+            { id: "S11", name: "Infinite Logging Loop", type: "Infra", mistakesNeeded: 1, desc: "Debug logging level set to TRACE in production." },
+            { id: "S12", name: "Zombie DB Replicas", type: "DB", mistakesNeeded: 1, desc: "Read replica lag exceeding 10 minutes." },
+            { id: "S13", name: "Deep Network Jitter", type: "Net", mistakesNeeded: 3, desc: "BGP route flap causing 15% packet loss." },
+            { id: "S14", name: "Critical: SSL Expiry", type: "Sec", mistakesNeeded: 4, desc: "Internal CA certificate expired for the mTLS gateway." },
+            { id: "S15", name: "Ghost in the Consumer", type: "App", mistakesNeeded: 1, desc: "Kafka consumer offset reset to 'earliest'." },
+            { id: "S16", name: "Memory Fragmentation", type: "Infra", mistakesNeeded: 2, desc: "RSS memory creep in Node.js processes due to leaks." },
+            { id: "S17", name: "Rogue Dev Script", type: "Mixed", mistakesNeeded: 2, desc: "Automated test script accidentally pointed at production." },
+            { id: "S18", name: "S3 Access Denied", type: "Sec", mistakesNeeded: 0, desc: "IAM policy update accidentally revoked 'GetObject' rights." },
+            { id: "S19", name: "Disk Leak: Debug Logs", type: "Infra", mistakesNeeded: 0, desc: "Logrotate failure on search nodes causing disk-full errors." },
+            { id: "S20", name: "Mixed Mode: Deadlock", type: "Mixed", mistakesNeeded: 2, desc: "Three-way circular dependency in database transaction locks." },
+            { id: "S21", name: "API Gateway Throttling", type: "Net", mistakesNeeded: 1, desc: "Excessive ingress traffic triggering aggressive rate limiting." },
+            { id: "S22", name: "WebSocket Buffer Overflow", type: "App", mistakesNeeded: 2, desc: "High-frequency updates causing message buffers to overflow." },
+            { id: "S23", name: "Rogue Container Pull", type: "Infra", mistakesNeeded: 3, desc: "Untrusted image pull from public registry blocking node Kubelet." },
+            { id: "S24", name: "Redis Shard Failure", type: "Cache", mistakesNeeded: 2, desc: "One shard in the Redis cluster went down silently." },
+            { id: "S25", name: "Zombie Cron Job", type: "App", mistakesNeeded: 1, desc: "Legacy backup script spawning hundreds of shell processes." },
+            { id: "S26", name: "ElasticSearch Index Lock", type: "DB", mistakesNeeded: 2, desc: "Index read-only lock triggered by low watermark disk alert." },
+            { id: "S27", name: "Cross-Region Packet Loss", type: "Net", mistakesNeeded: 2, desc: "Direct Connect failure between US-East and EU-West." },
+            { id: "S28", name: "Firewall Conflict Run", type: "Sec", mistakesNeeded: 1, desc: "Security group rule update accidentally blocked SSH/22." },
+            { id: "S29", name: "Memory Leak: Native Addon", type: "Infra", mistakesNeeded: 2, desc: "Buffalo C++ addon leaking memory in critical processing loops." },
+            { id: "S30", name: "K8s Control Plane Lag", type: "Infra", mistakesNeeded: 3, desc: "etcd latency causing pod scheduling delays across the cluster." }
+        ];
+
+        function populateScenarioPicker() {
+            const container = document.getElementById('scenario-list-container');
+            if (!container) return;
+            container.innerHTML = '';
+            SCENARIOS.forEach((s, index) => {
+                const card = document.createElement('div');
+                card.className = "scenario-card group p-5 rounded-xl cursor-pointer hover:border-primary transition-all border border-white/10 bg-white/5";
+                const difficulty = index < 4 ? 'EASY' : (index < 12 ? 'MEDIUM' : 'HARD');
+                let diffColor = 'text-primary';
+                if (difficulty === 'MEDIUM') diffColor = 'text-[#ffb84d]';
+                if (difficulty === 'HARD') diffColor = 'text-error';
+
+                card.onclick = () => {
+                   console.log("SCENARIOS: Card selected:", index);
+                   if (typeof window.selectScenario === 'function') {
+                      window.selectScenario(index);
+                      // Close modal is handled by selectScenario
+                   } else {
+                      console.error("Simulation engine (dashboard.js) not loaded yet.");
+                      closeScenarioPicker();
+                   }
+                };
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="font-mono text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded">${s.id}</span>
+                        <span class="text-[9px] font-black ${diffColor} tracking-widest border border-current px-1.5 rounded-sm">${difficulty}</span>
+                    </div>
+                    <h4 class="text-[13px] font-bold text-white group-hover:text-primary transition-colors mb-2">${s.name}</h4>
+                    <p class="text-[10px] text-white/60 line-clamp-2 mb-4">${s.desc}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openScenarioPicker() {
+            const modal = document.getElementById('scenario-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('active');
+                modal.style.display = 'flex';
+                populateScenarioPicker();
+                console.log("SCENARIOS: Picker activated via inline logic.");
+            }
+        }
+
+        function closeScenarioPicker() {
+            const modal = document.getElementById('scenario-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+        }
+        
+        // Export to window for HTML onclick access
+        window.openScenarioPicker = openScenarioPicker;
+        window.closeScenarioPicker = closeScenarioPicker;
+    </script>
+
+    <script src="navigation.js"></script>
+    <script src="network.js"></script>
+    <script src="threats.js"></script>
+    <script src="settings.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

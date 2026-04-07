@@ -1,0 +1,524 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   KINETIC COMMAND | AI Incident Response — Dashboard Styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+    --primary: #8eff71;
+    --error: #ff716c;
+}
+
+body {
+    background-color: #0e0e0f;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+@keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 113, 102, 0.1); }
+    50% { box-shadow: 0 0 30px rgba(255, 113, 102, 0.4); }
+}
+
+@keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 15px rgba(142, 255, 113, 0.1); }
+    50% { box-shadow: 0 0 30px rgba(142, 255, 113, 0.4); }
+}
+
+.animate-pulse-red {
+    animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-pulse-green {
+    animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.glass-panel {
+    background: rgba(38, 38, 39, 0.6);
+    backdrop-filter: blur(12px);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #484849;
+    border-radius: 10px;
+}
+
+/* ─── Timeline Items ─────────────────────────────────────────────────────── */
+
+.feed-item {
+    display: flex;
+    gap: 1rem;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slideIn {
+    animation: slideIn 0.3s ease-out;
+}
+
+.feed-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feed-marker-dot {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 1px;
+}
+
+.feed-marker-line {
+    width: 1px;
+    height: 100%;
+    background-color: #484849;
+    opacity: 0.3;
+}
+
+.feed-content {
+    padding-bottom: 1rem;
+    flex-grow: 1;
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.feed-step {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 0.1em;
+}
+
+.feed-label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.feed-reasoning {
+    font-size: 11px;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+}
+
+.feed-result {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #adaaab;
+}
+
+/* ─── Overlay States ─────────────────────────────────────────────────────── */
+
+.victory-overlay.active {
+    display: flex;
+}
+
+.mistake-flash.active {
+    opacity: 1;
+    transform: translate(-50%, 20px);
+}
+
+/* ─── Thinking Indicator ─────────────────────────────────────────────────── */
+
+#thinking-indicator.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.thinking-dots::after {
+    content: '...';
+    animation: dots 1.5s steps(4, end) infinite;
+    font-family: monospace;
+}
+
+@keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+/* Start/Reset Transitions */
+#btn-start:disabled, #btn-reset:disabled {
+    cursor: not-allowed;
+}
+
+#btn-start:disabled .w-10, #btn-reset:disabled .w-10 {
+    opacity: 0.2;
+}
+
+/* ─── Scenario Modal ─────────────────────────────────────────────────────── */
+
+#scenario-modal:not(.hidden) {
+    animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; background: rgba(0,0,0,0); }
+    to { opacity: 1; background: rgba(0,0,0,0.9); }
+}
+
+#scenario-modal > div {
+    animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.scenario-card:hover {
+    box-shadow: 0 0 20px rgba(142, 255, 113, 0.1);
+}
+
+/* ─── Multi-Module View Transitions ──────────────────────────────────────── */
+
+.view-module {
+    animation: fadeIn 0.4s ease-out;
+}
+
+#log-container p {
+    border-left: 2px solid transparent;
+    padding-left: 8px;
+    transition: all 0.2s;
+}
+
+#log-container p:hover {
+    background: rgba(142, 255, 113, 0.05);
+    border-left-color: var(--primary);
+}
+
+.map-node {
+    cursor: crosshair;
+}
+
+.map-node span {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.map-node:hover span {
+    transform: scale(1.2);
+}
+
+/* ─── Shared View Transitions ────────────────────────────────────────────── */
+
+.view-module {
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.view-module.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.view-module:not(.hidden) {
+    display: grid; /* Default for grid views */
+    animation: moduleEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Specific overrides for flex-based views */
+#view-system-map:not(.hidden),
+#view-incident-logs:not(.hidden),
+#view-threats:not(.hidden),
+#view-settings:not(.hidden) {
+    display: flex;
+}
+
+/* Specific overrides for grid-based views */
+#view-war-room:not(.hidden),
+#view-resources:not(.hidden),
+#view-network:not(.hidden),
+#view-firewall:not(.hidden) {
+    display: grid;
+}
+
+@keyframes moduleEnter {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Sidebar Tooltips ─────────────────────────────────────────────────── */
+
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-10px);
+    background: #1a191b;
+    color: #8eff71;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(142, 255, 113, 0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    z-index: 100;
+}
+
+[data-tooltip]:hover::before {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* ─── Sidebar Interactions ────────────────────────────────────────────── */
+
+.nav-btn {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-btn:hover {
+    background: rgba(44, 44, 45, 0.5);
+    color: #8eff71;
+}
+
+.nav-btn.active {
+    background: #1a191b;
+    color: #8eff71;
+}
+
+.nav-btn .material-symbols-outlined {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.nav-btn:hover .material-symbols-outlined {
+    transform: scale(1.1);
+    text-shadow: 0 0 10px rgba(142, 255, 113, 0.5);
+}
+
+/* ─── Security Animations ─────────────────────────────────────────────── */
+
+@keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+}
+
+/* ─── Operational Squad Enhancements ────────────────────────────────────── */
+
+.squad-item {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+}
+
+.squad-item:hover {
+    background: rgba(44, 44, 45, 0.5);
+    border-color: rgba(142, 255, 113, 0.1);
+    transform: translateX(4px);
+}
+
+.role-type-ai { color: #a855f7; }      /* Purple */
+.role-type-dev { color: #3b82f6; }     /* Blue */
+.role-type-sec { color: #ef4444; }     /* Red */
+.role-type-cmd { color: var(--primary); } /* Green */
+
+.status-indicator {
+    box-shadow: 0 0 8px rgba(142, 255, 113, 0.6);
+}
+
+/* ─── Tool-Specific Enhancements ────────────────────────────────────────── */
+
+.scan-item {
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(26, 25, 27, 0.5);
+    border-left: 3px solid var(--primary);
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+#firewall-logs div {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(255, 113, 108, 0.05);
+    border-left: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+#firewall-logs div:hover {
+    background: rgba(255, 113, 108, 0.1);
+    border-left-color: var(--error);
+}
+
+.ip-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #2c2c2d;
+    color: #ffffff;
+}
+
+/* ─── Toggle Switches ───────────────────────────────────────────────────── */
+/* ─── SCENARIOS SPECIALIZED STYLES ─── */
+#scenario-modal {
+    transition: opacity 0.3s ease-out;
+}
+
+#scenario-modal.active {
+    display: flex !important;
+}
+
+.scenario-card {
+    border: 1px solid rgba(142, 255, 113, 0.1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.scenario-card:hover {
+    border-color: var(--primary);
+    background: rgba(142, 255, 113, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(142, 255, 113, 0.1);
+}
+
+.scenario-card.selected {
+    border-color: var(--primary);
+    background: rgba(142, 255, 113, 0.1);
+    box-shadow: 0 0 15px rgba(142, 255, 113, 0.2);
+}
+
+/* Animations */
+@keyframes fade-in {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s forwards;
+}
+
+.cyber-toggle {
+    appearance: none;
+    width: 40px;
+    height: 20px;
+    background: #262627; /* surface-variant */
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(118, 117, 118, 0.5); /* outline/50 */
+}
+
+.cyber-toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    background: #adaaab; /* on-surface-variant */
+    border-radius: 50%;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cyber-toggle:checked {
+    background: rgba(142, 255, 113, 0.2); /* primary/20 */
+    border-color: var(--primary);
+    box-shadow: 0 0 10px rgba(142, 255, 113, 0.3);
+}
+
+.cyber-toggle:checked::after {
+    left: calc(100% - 2px);
+    transform: translateX(-100%);
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+}
+
+/* ─── Tactical Log Styles ─── */
+.log-entry {
+    display: flex;
+    gap: 12px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.2s;
+    animation: logEntryFlicker 0.4s ease-out;
+}
+
+.log-entry:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-left-color: var(--primary);
+}
+
+.log-entry.log-type-error { border-left-color: var(--error); background: rgba(255, 113, 108, 0.05); }
+.log-entry.log-type-error:hover { background: rgba(255, 113, 108, 0.1); }
+.log-entry.log-type-success { border-left-color: var(--primary); background: rgba(142, 255, 113, 0.05); }
+
+.log-tag {
+    font-size: 8px;
+    font-weight: 900;
+    padding: 1px 4px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    min-width: 50px;
+    text-align: center;
+}
+
+.log-tag-info { background: rgba(255,255,255,0.1); color: #adaaab; }
+.log-tag-action { background: rgba(142,255,113,0.15); color: var(--primary); border: 1px solid rgba(142,255,113,0.3); }
+.log-tag-error { background: rgba(255,113,108,0.2); color: var(--error); border: 1px solid rgba(255,113,108,0.4); }
+.log-tag-system { background: rgba(236,226,137,0.15); color: #ece289; border: 1px solid rgba(236,226,137,0.3); }
+
+.log-icon {
+    font-size: 14px !important;
+    opacity: 0.5;
+}
+
+@keyframes logEntryFlicker {
+    0% { opacity: 0; transform: translateX(-5px); }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
