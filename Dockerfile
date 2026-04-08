@@ -1,9 +1,14 @@
-FROM python:3.10
+FROM python:3.10-slim
+
 WORKDIR /app
+
+COPY requirements.txt* pyproject.toml* uv.lock* ./
+RUN pip install --no-cache-dir fastapi uvicorn openai 2>/dev/null || true
+
 COPY . .
 
-ENV API_BASE_URL="https://router.huggingface.co/v1"
-ENV MODEL_NAME="Qwen/Qwen2.5-72B-Instruct"
+RUN pip install --no-cache-dir -e . 2>/dev/null || true
 
-RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 7860
+
 CMD ["uvicorn", "server.app:app", "--host", "0.0.0.0", "--port", "7860"]
