@@ -124,23 +124,26 @@ def call_llm_probe():
         api_base = os.environ["API_BASE_URL"]
         api_key = os.environ["API_KEY"]
 
+        print(f"LLM_PROBE_ATTEMPTING: base_url={api_base}", flush=True)
+
         client = OpenAI(
             base_url=api_base,
             api_key=api_key
         )
 
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=[{"role": "user", "content": "Reply OK"}],
             max_tokens=5
         )
 
         print("LLM_API_CALL_EXECUTED", flush=True)
+        print(f"LLM_RESPONSE: {response.choices[0].message.content}", flush=True)
 
     except KeyError as e:
         print(f"LLM_PROBE_SKIPPED: Missing API env {e}", flush=True)
     except Exception as e:
-        print(f"LLM_CALL_ERROR: {str(e)}", flush=True)
+        print(f"LLM_CALL_ERROR: {type(e).__name__}: {str(e)}", flush=True)
 
     return "ok"
 
