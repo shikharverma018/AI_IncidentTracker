@@ -121,22 +121,24 @@ def predict(input_data=None):
 
 def call_llm_probe():
     try:
-        from openai import OpenAI
+        api_base = os.environ["API_BASE_URL"]
+        api_key = os.environ["API_KEY"]
+
         client = OpenAI(
-            base_url=os.environ.get("API_BASE_URL", "https://api.openai.com/v1"),
-            api_key=os.environ.get("API_KEY", "no-key")
+            base_url=api_base,
+            api_key=api_key
         )
 
-        # FORCE API CALL
-        _ = client.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": "Reply OK"}],
             max_tokens=5
         )
 
-        # MANDATORY SIGNAL
         print("LLM_API_CALL_EXECUTED", flush=True)
 
+    except KeyError as e:
+        print(f"LLM_PROBE_SKIPPED: Missing API env {e}", flush=True)
     except Exception as e:
         print(f"LLM_CALL_ERROR: {str(e)}", flush=True)
 
