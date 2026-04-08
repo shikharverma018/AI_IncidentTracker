@@ -1,3 +1,12 @@
+---
+title: AI Incident Tracker
+emoji: 🚨
+colorFrom: blue
+colorTo: red
+sdk: docker
+pinned: false
+---
+
 # 🚨 AI Incident Response — OpenEnv Environment
 
 An AI environment where agents learn to diagnose and resolve real-world infrastructure incidents.
