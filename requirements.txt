@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+openenv==0.1.13
+openai
+requests

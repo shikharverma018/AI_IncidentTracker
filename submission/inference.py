@@ -120,25 +120,28 @@ def predict(input_data=None):
     return {"result": "ok"}
 
 def call_llm_probe():
+    import requests
     try:
-        api_base = os.environ["API_BASE_URL"]
+        api_base = os.environ["API_BASE_URL"].rstrip("/")
         api_key = os.environ["API_KEY"]
 
         print(f"LLM_PROBE_ATTEMPTING: base_url={api_base}", flush=True)
 
-        client = OpenAI(
-            base_url=api_base,
-            api_key=api_key
-        )
+        url = f"{api_base}/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": "gpt-4o",
+            "messages": [{"role": "user", "content": "Reply OK"}],
+            "max_tokens": 5
+        }
 
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": "Reply OK"}],
-            max_tokens=5
-        )
-
+        resp = requests.post(url, headers=headers, json=payload, timeout=30)
+        print(f"LLM_HTTP_STATUS: {resp.status_code}", flush=True)
+        print(f"LLM_HTTP_RESPONSE: {resp.text}", flush=True)
         print("LLM_API_CALL_EXECUTED", flush=True)
-        print(f"LLM_RESPONSE: {response.choices[0].message.content}", flush=True)
 
     except KeyError as e:
         print(f"LLM_PROBE_SKIPPED: Missing API env {e}", flush=True)

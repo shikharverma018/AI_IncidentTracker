@@ -1,0 +1,15 @@
+[project]
+name = "hackathon-ai-incident"
+version = "0.1.0"
+description = "FastAPI app for hackathon evaluation"
+requires-python = ">=3.10"
+
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "openenv>=0.2.0",
+    "requests"
+]
+
+[project.scripts]
+server = "server.app:main"
