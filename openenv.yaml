@@ -1,6 +1,69 @@
-version: 1
-entrypoint:
-  file: server/app.py
-reset:
-  path: /reset
-  method: POST
+name: AI Incident Response Environment
+version: "1.0.0"
+description: >
+  A real-world AI environment where an agent must diagnose and resolve
+  infrastructure incidents (DB, Cache, Network, Security, Infra).
+  The agent interacts via step()/reset()/state() API with typed observations.
+
+observation_space:
+  type: object
+  fields:
+    scenario_id: string
+    scenario_name: string
+    scenario_type: string
+    symptoms: "list[string]"
+    current_step: integer
+    max_steps: integer
+    accumulated_reward: float
+    resolved: boolean
+    last_action_result: string
+    hints_unlocked: "list[string]"
+
+action_space:
+  type: object
+  fields:
+    action_type:
+      type: string
+      enum: [notify, diagnose, rollback, scale, speculate, noop]
+    target:
+      type: string
+      description: "Component targeted (db, cache, network, app, infra, security)"
+
+tasks:
+  - id: easy_notify_and_diagnose
+    difficulty: easy
+    description: "Resolve a DB Connection Pool incident with optimal action sequence"
+    max_steps: 15
+    reward_range: [0.0, 1.0]
+    passing_score: 0.7
+
+  - id: medium_security_recovery
+    difficulty: medium
+    description: "Recover from an Auth Token Disaster after an initial wrong fix attempt"
+    max_steps: 15
+    reward_range: [0.0, 1.0]
+    passing_score: 0.5
+
+  - id: hard_mixed_incident
+    difficulty: hard
+    description: "Resolve a Mixed Mode Deadlock with minimal hints and speculation penalties"
+    max_steps: 15
+    reward_range: [0.0, 1.0]
+    passing_score: 0.35
+
+reward_function:
+  step_penalty: -0.05
+  diagnostic_cost: -0.02
+  wrong_fix_penalty: -0.30
+  notify_bonus: +0.10
+  diagnose_bonus: +0.15
+  correct_fix_bonus: +1.00
+  partial_credit: true
+
+api:
+  reset: "env.reset() -> Observation"
+  step: "env.step(Action) -> StepResult"
+  state: "env.state() -> dict"
+
+entry_point: submission/inference.py
+environment_class: submission/env.py::IncidentResponseEnv
