@@ -14,9 +14,9 @@ const WRONG_FIX_PENALTY = 0.30;
 
 // ─── Operational Squad Data ──────────────────────────────────────────────
 const SQUAD_DATA = [
-    { name: "Aalekh Maheshwari", role: "AI Systems Engineer", type: "ai", avatar: "assets/squad/aalekh.png" },
-    { name: "Shikhar Verma", role: "Full Stack Developer", type: "dev", avatar: "assets/squad/shikhar.png" },
-    { name: "Vishwajit Jayswal", role: "Cybersecurity Analyst", type: "sec", avatar: "assets/squad/vishwajit.png" }
+    { name: "Aalekh Maheshwari", role: "AI Systems Engineer", type: "ai", avatar: "https://raw.githubusercontent.com/shikharverma018/AI_IncidentTracker/main/assets/squad/aalekh.png" },
+    { name: "Shikhar Verma", role: "Full Stack Developer", type: "dev", avatar: "https://raw.githubusercontent.com/shikharverma018/AI_IncidentTracker/main/assets/squad/shikhar.png" },
+    { name: "Vishwajit Jayswal", role: "Cybersecurity Analyst", type: "sec", avatar: "https://raw.githubusercontent.com/shikharverma018/AI_IncidentTracker/main/assets/squad/vishwajit.png" }
 ];
 
 let isProcessing = false;

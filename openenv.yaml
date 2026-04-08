@@ -1,0 +1,6 @@
+version: 1
+entrypoint:
+  file: server/app.py
+reset:
+  path: /reset
+  method: POST
